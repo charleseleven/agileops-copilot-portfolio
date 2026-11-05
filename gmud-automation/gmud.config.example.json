@@ -1,0 +1,53 @@
+{
+  // Dados FICTÍCIOS. Copie para gmud.config.json (ignorado pelo Git) e preencha com os valores reais.
+  "organization": "contoso",
+  "boardsProject": "Contoso Projetos",
+  "reposProject": "Contoso Repositorios",
+  // "subscriptionId": nunca versionar — use a variável AZURE_SUBSCRIPTION_ID.
+  "workspaceDirectory": "gmuds",
+
+  "repositories": [
+    { "name": "Contoso.PortalCliente.API", "kind": "Api", "key": "api", "aliases": ["API"], "appService": "contoso-portalcliente-api-{ambiente}-{cliente}" },
+    { "name": "Contoso.PortalCliente.WEB", "kind": "Web", "key": "web", "aliases": ["WEB", "Portal Web"], "appService": "contoso-portalcliente-web-{ambiente}-{cliente}" },
+    { "name": "Contoso.Integracao.GerenciadorJobs", "kind": "Backend", "key": "jobs", "aliases": ["GerenciadorJobs", "Jobs"], "appService": "contoso-integracao-gerenciadorjobs-{ambiente}" },
+    { "name": "Contoso.Legado.Database", "kind": "Database", "key": "database", "aliases": ["Database", "Banco de dados"] }
+  ],
+
+  "clients": [
+    { "titleName": "Cliente Um", "containerName": "CLI1", "appServiceName": "cli1" },
+    {
+      "titleName": "Cliente Dois", "containerName": "CLI2", "appServiceName": "cli2",
+      // Cenário 5: App Service fora do padrão — nome exato por repositório e ambiente.
+      "appServiceOverrides": { "Contoso.PortalCliente.WEB": { "gmud": "contoso-web-homolog-cli2" } }
+    }
+  ],
+
+  "descriptionItemTypes": ["User Story", "Bug"],
+  "relatedItemTypes": ["Task", "Bug"],
+  // Scripts de banco: anexos .txt nas tasks/bugs, nomeados US<idUS>_SCRIPT_TASK<idTask> (naming.databaseScriptName).
+  // O Database não recebe branch da GMUD, merge nem release — só a feature/us_<US> criada pelo desenvolvedor.
+  "databaseScriptExtensions": [".txt"],
+
+  "naming": {
+    "gmudBranch": "feature/us_{id}",
+    "itemBranch": "feature/us_{id}",
+    "productionRelease": "release/GMUD_PROD_{cliente}_{data}",
+    "gmudRelease": "release/GMUD_GMUD_{cliente}_{data}",
+    // Tag do container "<buildId>-<branch>-<commitSha>": o segmento central ganha o prefixo, exceto as branches abaixo ("*" = qualquer sufixo).
+    "sourceBranchPrefix": "release/",
+    "sourceBranchesWithoutPrefix": ["main", "main_*"],
+    "mergeCommitMessage": "GMUD {gmud}: merge {branch}",
+    "reconciliationCommitMessage": "GMUD {gmud}: conciliação {branch}",
+    "databaseScriptName": "US{userStory}_SCRIPT_TASK{item}",
+    "productionEnvironment": "prd",
+    "gmudEnvironment": "gmud"
+  },
+
+  "build": { "timeoutMinutes": 30, "pollIntervalSeconds": 30 },
+
+  // Ordem das etapas: incluir, remover ou reordenar aqui, sem alterar o código.
+  "steps": [
+    "resolver-gmud", "mapear-itens-descricao", "mapear-tasks-bugs", "mapear-projetos-scripts", "armazenar-informacoes",
+    "buscar-tag-vigente", "criar-branch-gmud", "merge-user-stories", "corrigir-conflitos", "criar-releases", "acompanhar-build"
+  ]
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "name": "Contoso.PortalCliente.API",
+    "kind": "Api",
+    "siteNameTemplate": "contoso-portalcliente-api-{ambiente}-{cliente}",
+    "tag": "API"
+  },
+  {
+    "name": "Contoso.PortalCliente.WEB",
+    "kind": "Web",
+    "siteNameTemplate": "contoso-portalcliente-web-{ambiente}-{cliente}",
+    "tag": "WEB"
+  },
+  {
+    "name": "Contoso.Integracao.GerenciadorJobs",
+    "kind": "Backend",
+    "fixedSiteName": "contoso-integracao-gerenciadorjobs-prd-01"
+  },
+  {
+    "name": "Contoso.Legado.Database",
+    "kind": "Database",
+    "tag": "Database"
+  }
+]

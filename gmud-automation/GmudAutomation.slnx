@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="GmudAutomation.Cli/GmudAutomation.Cli.csproj" />
+  <Project Path="GmudAutomation.Core/GmudAutomation.Core.csproj" />
+  <Project Path="GmudAutomation.Tests/GmudAutomation.Tests.csproj" />
+</Solution>

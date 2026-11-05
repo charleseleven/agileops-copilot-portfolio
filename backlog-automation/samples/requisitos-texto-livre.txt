@@ -1,0 +1,17 @@
+Reunião de levantamento — App de Agendamento da Clínica
+
+O objetivo é permitir que pacientes agendem consultas pelo celular, sem ligar para a recepção.
+
+O paciente precisa se cadastrar com CPF, e-mail e telefone, e fazer login. O time estimou o cadastro em
+5 pontos e o login em 3 pontos. A recuperação de senha por e-mail ficou com 2 pontos.
+
+Depois de logado, o paciente escolhe a especialidade, o médico e um horário livre na agenda. Isso foi
+estimado em 8 story points. Ele também deve poder cancelar um agendamento com até 24h de antecedência
+(3 pontos). A recepção precisa de uma tela para ver a agenda do dia de cada médico (5 pontos,
+complexidade alta).
+
+Tarefas já levantadas pelo time para o agendamento: API de horários disponíveis (8 horas), tela de
+seleção de horário (6 horas), notificação por e-mail de confirmação (4 horas) e testes (1 dia).
+
+Hoje existe um defeito no sistema legado: ao cancelar, o horário não volta a ficar disponível. Corrigir
+isso levará cerca de 3 horas.

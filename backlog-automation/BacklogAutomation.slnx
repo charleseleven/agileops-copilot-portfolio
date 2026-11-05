@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="BacklogAutomation.Cli/BacklogAutomation.Cli.csproj" />
+  <Project Path="BacklogAutomation.Core/BacklogAutomation.Core.csproj" />
+  <Project Path="BacklogAutomation.Tests/BacklogAutomation.Tests.csproj" />
+</Solution>

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>AgilePredict</RootNamespace>
+    <UserSecretsId>a1c9f3e2-7b4d-4e6a-9f21-5d8c0b6e1234</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.10" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.0.0" />
+  </ItemGroup>
+
+  <!-- O globbing padrão do SDK é recursivo e pegaria os .cs do projeto de testes aninhado. -->
+  <ItemGroup>
+    <Compile Remove="FlowDiagnosticsApi.Tests/**/*.cs" />
+  </ItemGroup>
+
+</Project>

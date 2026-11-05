@@ -1,0 +1,26 @@
+# .NET
+bin/
+obj/
+*.user
+
+# Node
+node_modules/
+.nuxt/
+.output/
+dist/
+
+# Segredos locais
+.env
+.env.*
+!.env.example
+*.secrets.json
+
+# gmud-automation: configuração real e artefatos por GMUD (dados de cliente, scripts de banco)
+gmud-automation/gmud.config.json
+gmud-automation/gmuds/
+gmud-automation/GmudAutomation.Cli/nupkg/
+
+# IDE
+.vs/
+.vscode/
+*.suo
