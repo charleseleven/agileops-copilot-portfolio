@@ -38,6 +38,19 @@ const capabilities = [
     linkLabel: 'Abrir demo funcional',
     linkHref: '/flow-diagnostics',
     cta: 'Experimentar agora'
+  },
+  {
+    key: 'sprint-risk',
+    badge: 'Epic #146 · Feature 8',
+    icon: 'mdi-radar',
+    title: 'Sprint Risk Bot',
+    subtitle: 'Previsão de gargalos na sprint ativa',
+    description:
+      'Bot preditivo que cruza as Horas Estimadas entregues com a capacidade diária restante do time, aponta sobrecarga por membro e ritmo abaixo do necessário, e traz o parecer da IA num dashboard executivo com atualização automática.',
+    tech: '.NET Web API · LLM · Nuxt/Vue + Tailwind',
+    linkLabel: 'Abrir dashboard',
+    linkHref: '/sprint-risk',
+    cta: 'Ver risco da sprint'
   }
 ]
 </script>
@@ -57,7 +70,7 @@ const capabilities = [
       três capacidades já desenvolvidas e reunidas aqui sob uma identidade só.
     </p>
 
-    <div class="mt-10 grid grid-cols-1 gap-5 md:grid-cols-3">
+    <div class="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
       <div
         v-for="capability in capabilities"
         :key="capability.key"

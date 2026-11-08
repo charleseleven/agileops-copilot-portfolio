@@ -6,6 +6,7 @@ export default <Partial<Config>>{
     './app/components/**/*.{vue,js,ts}',
     './app/layouts/**/*.vue',
     './app/pages/**/*.vue',
+    './app/utils/**/*.ts',
     './app/app.vue'
   ],
   // Projeto novo, sem nenhum outro framework de CSS — Tailwind cuida do reset global (preflight).

@@ -6,7 +6,8 @@ const mobileOpen = ref(false)
 
 const navLinks = [
   { to: '/', label: 'Home' },
-  { to: '/flow-diagnostics', label: 'Flow Diagnostics' }
+  { to: '/flow-diagnostics', label: 'Flow Diagnostics' },
+  { to: '/sprint-risk', label: 'Sprint Risk' }
 ]
 </script>
 
