@@ -82,6 +82,22 @@ builder.Services.AddScoped<IFlowMetricsCalculator, FlowMetricsCalculator>();
 builder.Services.AddScoped<IFlowInsightGenerator, FlowInsightGenerator>();
 builder.Services.AddScoped<IFlowDiagnosticsOrchestrator, FlowDiagnosticsOrchestrator>();
 
+// ===== SPRINT RISK BOT (Feature 8 / PBI 8.1 e 8.2) =====
+builder.Services.AddOptions<SprintRiskConfiguration>()
+    .Bind(builder.Configuration.GetSection(SprintRiskConfiguration.SectionName))
+    .ValidateDataAnnotations()
+    .Validate(c => c.CriticalUtilizationThreshold >= c.WarningUtilizationThreshold,
+        "CriticalUtilizationThreshold deve ser maior ou igual a WarningUtilizationThreshold")
+    .ValidateOnStart();
+
+builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddScoped<IAzureDevOpsConnectionResolver, AzureDevOpsConnectionResolver>();
+builder.Services.AddScoped<ISprintCapacityDataSource, AzureDevOpsSprintCapacityDataSource>();
+builder.Services.AddSingleton<ISprintRiskAnalyzer, SprintRiskAnalyzer>();
+builder.Services.AddSingleton<ISprintRiskPromptBuilder, SprintRiskPromptBuilder>();
+builder.Services.AddScoped<ISprintRiskInsightGenerator, SprintRiskInsightGenerator>();
+builder.Services.AddScoped<ISprintRiskBot, SprintRiskBot>();
+
 // ===== CORS (dev only) =====
 // Libera o Nuxt dev server (frontend) para consumir a API em desenvolvimento. Qualquer porta em
 // localhost/127.0.0.1 é aceita porque o Nuxt troca de porta automaticamente quando a padrão

@@ -15,9 +15,13 @@
     <PackageReference Include="Scalar.AspNetCore" Version="2.0.0" />
   </ItemGroup>
 
-  <!-- O globbing padrão do SDK é recursivo e pegaria os .cs do projeto de testes aninhado. -->
+  <!-- O globbing padrão do SDK é recursivo e pegaria os arquivos do projeto de testes aninhado:
+       os .cs (Compile) e os .json de bin/obj dos testes (Content), que eram recopiados a cada build. -->
   <ItemGroup>
-    <Compile Remove="FlowDiagnosticsApi.Tests/**/*.cs" />
+    <Compile Remove="FlowDiagnosticsApi.Tests/**" />
+    <Content Remove="FlowDiagnosticsApi.Tests/**" />
+    <None Remove="FlowDiagnosticsApi.Tests/**" />
+    <EmbeddedResource Remove="FlowDiagnosticsApi.Tests/**" />
   </ItemGroup>
 
 </Project>
