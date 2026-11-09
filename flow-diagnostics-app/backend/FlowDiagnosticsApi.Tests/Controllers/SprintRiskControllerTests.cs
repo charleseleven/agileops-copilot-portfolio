@@ -79,6 +79,49 @@ namespace AgilePredict.Tests.Controllers
             _bot.Verify(b => b.GenerateReportAsync(It.IsAny<AzureDevOpsConnection>(), null, "Meu Projeto\\Sprint 8", true, It.IsAny<CancellationToken>()));
         }
 
+        private const string TaskboardUrl =
+            "https://dev.azure.com/contoso/Meu%20Projeto/_sprints/taskboard/Time%20Alpha/Meu%20Projeto/2026-11-Sprint-21";
+
+        [Fact]
+        public async Task GetReport_UrlDoTaskboardDaSprint_UsaTimeESprintDaUrl()
+        {
+            var request = Request();
+            request.BoardsUrl = TaskboardUrl;
+            _bot.Setup(b => b.GenerateReportAsync(It.IsAny<AzureDevOpsConnection>(), It.IsAny<string>(), It.IsAny<string>(), true, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new SprintRiskReport());
+
+            await Controller().GetReport(request, CancellationToken.None);
+
+            _bot.Verify(b => b.GenerateReportAsync(
+                new AzureDevOpsConnection("contoso", "Meu Projeto", "pat-req"), "Time Alpha", "Meu Projeto\\2026-11-Sprint-21", true, It.IsAny<CancellationToken>()));
+        }
+
+        [Fact]
+        public async Task GetReport_TimeESprintInformados_PrevalecemSobreAUrl()
+        {
+            var request = Request();
+            request.BoardsUrl = TaskboardUrl;
+            request.Team = "Time Dev";
+            request.IterationPath = "Meu Projeto\\Sprint 9";
+            _bot.Setup(b => b.GenerateReportAsync(It.IsAny<AzureDevOpsConnection>(), It.IsAny<string>(), It.IsAny<string>(), true, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new SprintRiskReport());
+
+            await Controller().GetReport(request, CancellationToken.None);
+
+            _bot.Verify(b => b.GenerateReportAsync(It.IsAny<AzureDevOpsConnection>(), "Time Dev", "Meu Projeto\\Sprint 9", true, It.IsAny<CancellationToken>()));
+        }
+
+        [Theory]
+        [InlineData("https://dev.azure.com/contoso/Meu%20Projeto/_backlogs/backlog/Time%20Dev/Stories", "Time Dev")]
+        [InlineData("https://dev.azure.com/contoso/Meu%20Projeto/_boards/board/t/Time%20Dev/Stories", "Time Dev")]
+        [InlineData("https://dev.azure.com/contoso/Meu%20Projeto/_sprints/backlog/Time%20Dev/Meu%20Projeto/Sprint%208", "Time Dev")]
+        [InlineData("https://dev.azure.com/contoso/Meu%20Projeto/_workitems/edit/10", null)]
+        [InlineData("https://dev.azure.com/contoso/Meu%20Projeto/_boards/board", null)]
+        public void UrlParser_TryExtractTeam_ReconheceLinksDoTime(string url, string? expected)
+        {
+            Assert.Equal(expected, new AzureDevOpsBoardsUrlParser().TryExtractTeam(url));
+        }
+
         [Fact]
         public async Task GetReport_SprintNaoEncontrada_Retorna404()
         {

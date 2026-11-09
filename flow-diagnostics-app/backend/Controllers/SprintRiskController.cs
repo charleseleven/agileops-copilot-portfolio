@@ -44,11 +44,14 @@ namespace AgilePredict.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             Models.Flow.AzureDevOpsConnection connection;
+            string? team;
             string? iterationPath;
             try
             {
                 connection = _resolver.Resolve(request.BoardsUrl, request.Organization, request.Project, request.PersonalAccessToken);
-                iterationPath = _resolver.NormalizeIterationPath(request.IterationPath);
+                // Link do taskboard/backlog da sprint já traz time e sprint: aproveita quando os campos estão vazios.
+                team = _resolver.ResolveTeam(request.BoardsUrl, request.Team);
+                iterationPath = _resolver.ResolveIterationPath(request.BoardsUrl, request.IterationPath);
             }
             catch (ArgumentException ex)
             {
@@ -57,7 +60,7 @@ namespace AgilePredict.Controllers
 
             try
             {
-                return Ok(await _bot.GenerateReportAsync(connection, request.Team, iterationPath, request.IncludeAiInsight, cancellationToken));
+                return Ok(await _bot.GenerateReportAsync(connection, team, iterationPath, request.IncludeAiInsight, cancellationToken));
             }
             catch (SprintNotFoundException ex)
             {

@@ -63,8 +63,15 @@ namespace AgilePredict.Services
 
             var iterationTask = ResolveIterationAsync(connection, teamName, teamBase, iterationPath, cancellationToken);
             var workingDaysTask = GetWorkingDaysAsync(connection, teamBase, cancellationToken);
-            // WhenAll observa as duas tarefas; se ambas falharem, propaga a da iteração (a primeira da lista).
-            await Task.WhenAll(iterationTask, workingDaysTask);
+            try
+            {
+                await Task.WhenAll(iterationTask, workingDaysTask);
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                // As duas chamadas usam a rota do time; qualquer uma pode terminar primeiro com 404.
+                throw TeamNotFound(teamName, connection.Project);
+            }
             var iteration = iterationTask.Result;
 
             var capacityTask = GetCapacitiesAsync(connection, teamBase, iteration.Id, cancellationToken);
@@ -103,8 +110,7 @@ namespace AgilePredict.Services
             }
             catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
-                throw new SprintNotFoundException(
-                    $"Time '{teamName}' não encontrado no projeto '{connection.Project}'. Informe o nome exato do time (campo team).");
+                throw TeamNotFound(teamName, connection.Project);
             }
 
             using (document)
@@ -126,6 +132,10 @@ namespace AgilePredict.Services
                         $"A sprint '{wanted}' não está entre as iterações do time '{teamName}' (ou não tem datas de início e fim).");
             }
         }
+
+        private static SprintNotFoundException TeamNotFound(string teamName, string project) => new(
+            $"Time '{teamName}' não encontrado no projeto '{project}' (ou o projeto não existe). " +
+            "Informe o nome exato do time em 'Time e sprint específicos' ou cole a URL da sprint do time (…/_sprints/taskboard/<time>/…).");
 
         private static SprintIteration? ParseIteration(JsonElement element)
         {
