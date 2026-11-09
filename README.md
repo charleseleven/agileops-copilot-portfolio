@@ -6,7 +6,7 @@
 
 **.NET 10 · C# · Node.js · Nuxt/Vue · Azure DevOps REST · Azure App Service · MCP (Model Context Protocol) · LLM**
 
-`394 testes automatizados` · `4 módulos independentes` · `nenhuma escrita sem confirmação explícita`
+`402 testes automatizados` · `4 módulos independentes` · `nenhuma escrita sem confirmação explícita`
 
 ---
 
@@ -24,7 +24,7 @@
 |---|---|---|
 | 🔀 [`gmud-automation/`](./gmud-automation) | Preparar uma GMUD exigia horas de trabalho manual: ler cards, achar as branches de cada user story, partir da versão que está em produção, fazer merges, resolver conflitos, criar releases e montar o pacote para a infra. | Pipeline de **11 etapas** com manifesto JSON idempotente (retoma de onde parou), `--dry-run`, gate `--confirm-write`, conciliação de conflitos com aprovação humana, **cenários BDD** com fakes em memória. **217 testes.** |
 | 🧱 [`backlog-automation/`](./backlog-automation) | Converter atas, e-mails e documentos de requisitos em Epics → Features → User Stories → Tasks leva tempo e perde informação (estimativas, critérios). | Parser determinístico para documentos estruturados (Word/Markdown, sem IA) e LLM só para texto livre; valida INVEST/Gherkin; cria os cards no **Azure DevOps, Jira ou Trello** já na hierarquia. **96 testes.** |
-| 📊 [`flow-diagnostics-app/`](./flow-diagnostics-app) | O board mostra *o que* está atrasado, mas não *onde* o fluxo trava nem *por quê*. | API .NET + Nuxt/Vue: Cycle Time por etapa, baseline estatístico (média + desvio), itens críticos e insights gerados por LLM. Inclui o [**Sprint Risk Bot**](./flow-diagnostics-app/SPRINT-RISK-BOT.md): cruza as Horas Estimadas entregues com a capacidade diária restante do time, projeta o atraso e alimenta um System Prompt dinâmico; dashboard responsivo com atualização automática. **74 testes.** |
+| 📊 [`flow-diagnostics-app/`](./flow-diagnostics-app) | O board mostra *o que* está atrasado, mas não *onde* o fluxo trava nem *por quê*. | API .NET + Nuxt/Vue: Cycle Time por etapa, baseline estatístico (média + desvio), itens críticos e insights gerados por LLM. Inclui o [**Sprint Risk Bot**](./flow-diagnostics-app/SPRINT-RISK-BOT.md): cruza as Horas Estimadas entregues com a capacidade diária restante do time, projeta o atraso e alimenta um System Prompt dinâmico; dashboard responsivo com atualização automática. **82 testes.** |
 | 🔌 [`mcp-tooling/`](./mcp-tooling) | O assistente de IA não enxerga o Azure DevOps nem os App Services. | Servidor **MCP** com tools de Boards, Repos, Pipelines, App Service e GMUD; leitura livre, escrita só com aprovação. **7 testes.** |
 
 ## Arquitetura
@@ -92,7 +92,7 @@ Estas regras estão no código e cobertas por testes, não só na documentação
 
 ## Qualidade
 
-- **394 testes automatizados** (xUnit + Moq + FluentAssertions no .NET, `node:test` no MCP), sem rede:
+- **402 testes automatizados** (xUnit + Moq + FluentAssertions no .NET, `node:test` no MCP), sem rede:
   clientes HTTP testados com handlers falsos e o pipeline de GMUD com um Azure DevOps em memória.
 - **Cenários BDD** descrevem o processo de ponta a ponta (ex.: *"GMUD só de banco"*, *"conflito ambíguo para
   aprovação"*, *"reexecução não duplica releases"*).

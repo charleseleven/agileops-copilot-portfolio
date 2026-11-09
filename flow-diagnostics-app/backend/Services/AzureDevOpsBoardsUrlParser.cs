@@ -91,5 +91,39 @@ namespace AgilePredict.Services
             var iterationParts = segments[(sprintsIndex + 3)..];
             return iterationParts.Length > 0 ? string.Join('\\', iterationParts) : null;
         }
+
+        public string? TryExtractTeam(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url) || !Uri.TryCreate(url.Trim(), UriKind.Absolute, out var uri))
+            {
+                return null;
+            }
+
+            var segments = uri.AbsolutePath
+                .Split('/', StringSplitOptions.RemoveEmptyEntries)
+                .Select(Uri.UnescapeDataString)
+                .ToArray();
+
+            string? At(int index) => index >= 0 && index < segments.Length && !string.IsNullOrWhiteSpace(segments[index])
+                ? segments[index]
+                : null;
+
+            for (var i = 0; i < segments.Length; i++)
+            {
+                var segment = segments[i];
+                // .../_sprints/{taskboard|backlog|capacity|...}/{time}/...
+                if (segment.Equals("_sprints", StringComparison.OrdinalIgnoreCase)) return At(i + 2);
+                // .../_backlogs/backlog/{time}/...
+                if (segment.Equals("_backlogs", StringComparison.OrdinalIgnoreCase)) return At(i + 2);
+                // .../_boards/board/t/{time}/...
+                if (segment.Equals("_boards", StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(At(i + 2), "t", StringComparison.OrdinalIgnoreCase))
+                {
+                    return At(i + 3);
+                }
+            }
+
+            return null;
+        }
     }
 }

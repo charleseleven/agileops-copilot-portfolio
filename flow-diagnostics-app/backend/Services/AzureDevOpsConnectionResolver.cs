@@ -20,6 +20,19 @@ namespace AgilePredict.Services
         /// </summary>
         /// <exception cref="ArgumentException">URL da qual não foi possível extrair a sprint.</exception>
         string? NormalizeIterationPath(string? iterationPath);
+
+        /// <summary>
+        /// Time informado; se vazio, o time da URL colada (link de sprint/backlog/board do time).
+        /// Nulo quando nenhum dos dois traz o time (o chamador usa o time padrão do projeto).
+        /// </summary>
+        string? ResolveTeam(string? boardsUrl, string? team);
+
+        /// <summary>
+        /// Sprint informada (Iteration Path ou URL); se vazia, a sprint da URL colada no campo do
+        /// Azure Boards. Nulo = sprint atual do time.
+        /// </summary>
+        /// <exception cref="ArgumentException">URL no campo da sprint da qual não foi possível extrair a sprint.</exception>
+        string? ResolveIterationPath(string? boardsUrl, string? iterationPath);
     }
 
     public sealed class AzureDevOpsConnectionResolver : IAzureDevOpsConnectionResolver
@@ -73,6 +86,19 @@ namespace AgilePredict.Services
 
             return _urlParser.TryExtractIterationPath(value) ?? throw new ArgumentException(
                 "O campo da sprint recebeu uma URL, mas não foi possível extrair a sprint dela. Informe o Iteration Path (ex.: 'Projeto\\Sprint 1').");
+        }
+
+        public string? ResolveTeam(string? boardsUrl, string? team)
+        {
+            if (!string.IsNullOrWhiteSpace(team)) return team.Trim();
+            return string.IsNullOrWhiteSpace(boardsUrl) ? null : _urlParser.TryExtractTeam(boardsUrl);
+        }
+
+        public string? ResolveIterationPath(string? boardsUrl, string? iterationPath)
+        {
+            var explicitPath = NormalizeIterationPath(iterationPath);
+            if (explicitPath is not null) return explicitPath;
+            return string.IsNullOrWhiteSpace(boardsUrl) ? null : _urlParser.TryExtractIterationPath(boardsUrl);
         }
 
         private string? DefaultToken(string organization)

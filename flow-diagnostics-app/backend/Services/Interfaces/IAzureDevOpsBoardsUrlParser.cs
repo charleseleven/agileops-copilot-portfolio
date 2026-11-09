@@ -23,5 +23,12 @@ namespace AgilePredict.Services.Interfaces
         /// campo de Iteration Path.
         /// </summary>
         string? TryExtractIterationPath(string url);
+
+        /// <summary>
+        /// Tenta extrair o nome do time de uma URL de sprint, backlog ou board do time
+        /// (".../_sprints/taskboard/{time}/...", ".../_backlogs/backlog/{time}/...",
+        /// ".../_boards/board/t/{time}/..."). Retorna null quando a URL não traz o time.
+        /// </summary>
+        string? TryExtractTeam(string url);
     }
 }

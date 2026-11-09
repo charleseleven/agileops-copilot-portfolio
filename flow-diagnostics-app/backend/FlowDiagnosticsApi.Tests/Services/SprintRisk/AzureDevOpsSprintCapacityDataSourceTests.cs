@@ -170,6 +170,18 @@ namespace AgilePredict.Tests.Services.SprintRisk
         }
 
         [Fact]
+        public async Task GetSnapshotAsync_404SoNosDiasUteisDoTime_LancaSprintNotFoundEmVezDeErroGenerico()
+        {
+            var routes = HappyRoutes();
+            routes["/_apis/work/teamsettings?"] = (HttpStatusCode.NotFound, "{}");
+            var (dataSource, _) = Create(routes);
+
+            var ex = await Assert.ThrowsAsync<SprintNotFoundException>(() => dataSource.GetSnapshotAsync(Connection, null, null));
+
+            Assert.Contains("Meu Projeto Team", ex.Message);
+        }
+
+        [Fact]
         public async Task GetSnapshotAsync_PatInvalido_PropagaHttpRequestExceptionComStatus()
         {
             var routes = HappyRoutes();
